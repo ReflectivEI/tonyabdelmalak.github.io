@@ -1,5 +1,4 @@
-
-name: Deploy Cloudflare Worker
+name: Deploy Cloudflare Worker (chat API only)
 
 on:
   push:
@@ -19,6 +18,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Explain deploy scope
+        run: |
+          echo "This workflow deploys only wrangler.toml worker entry (chat-widget/worker.js)."
+          echo "It does NOT publish index.html/static site assets to tonyabdelmalak.com."
 
       - name: Validate required secret
         env:
