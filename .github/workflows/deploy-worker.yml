@@ -8,25 +8,31 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Optional: quick visibility when debugging
-      - name: Sanity check (masked)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate required secret
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          echo "Account (if provided): ${CLOUDFLARE_ACCOUNT_ID:-<none>}"
+          if [ -z "$CF_TOKEN" ]; then
+            echo "Missing required secret: CLOUDFLARE_API_TOKEN"
+            exit 1
+          fi
 
       - name: Install Wrangler (v4)
         run: |
           npm i -g wrangler@4
           wrangler --version
-
-      - name: Wrangler whoami (CLI)
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: wrangler whoami
 
       - name: Deploy via Wrangler
         env:
