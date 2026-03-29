@@ -278,98 +278,6 @@
     }
     .carousel-arrow.left { right: 2rem; }
     .carousel-arrow.right { right: 0; }
-
-    /* InterviewIQ section */
-    #interviewiq {
-      background: linear-gradient(180deg, #082451 0%, #062041 100%);
-      color: #e5edf8;
-    }
-    #interviewiq .section-title h2 { color: #fff; }
-    .interview-shell {
-      background: rgba(8, 32, 73, 0.8);
-      border: 1px solid rgba(93, 126, 189, 0.5);
-      border-radius: 18px;
-      padding: 1.25rem;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-    }
-    .interview-shell .form-label {
-      color: #bcd0f4;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.35rem;
-      font-weight: 600;
-    }
-    .interview-shell .form-control,
-    .interview-shell .form-select {
-      background: rgba(8, 38, 82, 0.8);
-      border: 1px solid rgba(123, 153, 212, 0.45);
-      color: #fff;
-    }
-    .interview-shell .form-control::placeholder { color: #9db3d9; }
-    .interview-shell .form-control:focus,
-    .interview-shell .form-select:focus {
-      box-shadow: 0 0 0 0.2rem rgba(20, 184, 166, 0.25);
-      border-color: #14B8A6;
-    }
-    .interview-panel {
-      background: rgba(7, 29, 66, 0.95);
-      border: 1px solid rgba(96, 142, 220, 0.35);
-      border-radius: 14px;
-      padding: 1rem;
-      height: 100%;
-    }
-    .interview-panel h4 {
-      color: #fff;
-      font-size: 1.05rem;
-      margin-bottom: 0.75rem;
-    }
-    .coach-pill-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
-    }
-    .coach-pill {
-      border: 1px solid rgba(76, 165, 255, 0.65);
-      background: rgba(15, 76, 140, 0.45);
-      color: #d8e8ff;
-      border-radius: 999px;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.82rem;
-      line-height: 1.2;
-      cursor: pointer;
-    }
-    .coach-pill:hover,
-    .coach-pill.active {
-      background: rgba(20, 184, 166, 0.3);
-      border-color: #14B8A6;
-      color: #fff;
-    }
-    .interview-section-card { display: none; }
-    .interview-section-card.active { display: block; }
-    .ai-response {
-      white-space: pre-wrap;
-      background: rgba(4, 21, 49, 0.95);
-      border: 1px solid rgba(80, 171, 255, 0.45);
-      border-radius: 10px;
-      padding: 0.9rem;
-      color: #f2f8ff;
-      min-height: 150px;
-      margin-top: 0.7rem;
-    }
-    .kpi-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.3rem 0.55rem;
-      border-radius: 999px;
-      background: rgba(20, 184, 166, 0.16);
-      border: 1px solid rgba(20, 184, 166, 0.45);
-      margin: 0.25rem 0.3rem 0 0;
-      font-size: 0.8rem;
-      color: #d4f8f2;
-    }
   </style>
 </head>
 <body>
@@ -388,7 +296,6 @@
           <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#results">Results</a></li>
-          <li class="nav-item"><a class="nav-link" href="#interviewiq">InterviewIQ</a></li>
           <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
           <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
         </ul>
@@ -412,103 +319,6 @@
         <span class="typed"
               data-typed-items="Advancing HR Tech Through Automation and Data Visualization; Shaping Workforce Strategies with Data-Driven Insights; Leading with AI-Driven Insights for Smarter Decisions; Elevating Culture, Performance, and People Success; Cultivating Diversity, Equity, and Inclusion; Empowering Growth Through Collaboration, Communication, and Coaching"></span>
       </p>
-    </div>
-  </section>
-
-  <!-- InterviewIQ Section -->
-  <section id="interviewiq">
-    <div class="container" data-aos="fade-up">
-      <div class="section-title">
-        <h2>InterviewIQ Platform</h2>
-        <p class="mb-0">Enterprise-grade interview preparation with role-specific prompts, AI coach guidance and flexible response frameworks.</p>
-      </div>
-      <div class="interview-shell">
-        <div class="row g-3 mb-3">
-          <div class="col-lg-4">
-            <label class="form-label" for="iq-section-select">Section</label>
-            <select id="iq-section-select" class="form-select">
-              <option value="setup" selected>Role Setup & Inputs</option>
-              <option value="library">Question Library</option>
-              <option value="coach">AI Coach & Response Studio</option>
-            </select>
-          </div>
-          <div class="col-lg-4">
-            <label class="form-label" for="iq-role">Role interviewing for</label>
-            <input id="iq-role" class="form-control" placeholder="e.g., Senior Workforce Analytics Manager">
-          </div>
-          <div class="col-lg-4">
-            <label class="form-label" for="iq-format">Response mode</label>
-            <select id="iq-format" class="form-select">
-              <option>STAR Method</option>
-              <option>Story Format</option>
-              <option>Executive Brief</option>
-              <option>Challenge Me With Follow-Up</option>
-            </select>
-          </div>
-        </div>
-
-        <div id="iq-card-setup" class="interview-section-card active">
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <div class="interview-panel">
-                <h4>Upload context</h4>
-                <label class="form-label" for="iq-resume">Resume (txt, md, pdf, doc/docx)</label>
-                <input id="iq-resume" class="form-control mb-3" type="file" accept=".txt,.md,.pdf,.doc,.docx">
-                <label class="form-label" for="iq-jd">Job description</label>
-                <textarea id="iq-jd" class="form-control" rows="6" placeholder="Paste the job description or requirements."></textarea>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="interview-panel">
-                <h4>Role briefing & readiness</h4>
-                <p class="mb-2">Upload your resume and provide job context to generate personalized question sets and AI-assisted answers.</p>
-                <div class="kpi-chip">✓ 5-7 role-specific questions</div>
-                <div class="kpi-chip">✓ Follow-up simulation</div>
-                <div class="kpi-chip">✓ AI answer framework switcher</div>
-                <div class="kpi-chip">✓ Free-form response scoring</div>
-                <button id="iq-generate-questions" class="btn btn-cta mt-3">Generate 5-7 Key Questions</button>
-                <p id="iq-upload-status" class="small mt-2 mb-0 text-info"></p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="iq-card-library" class="interview-section-card">
-          <div class="interview-panel">
-            <h4>Question library</h4>
-            <p class="mb-2">Click a question to auto-populate the answer workspace.</p>
-            <div id="iq-question-pills" class="coach-pill-wrap"></div>
-            <label class="form-label mt-3" for="iq-custom-question">Or write your own question</label>
-            <textarea id="iq-custom-question" class="form-control" rows="3" placeholder="Add a custom scenario or technical question."></textarea>
-          </div>
-        </div>
-
-        <div id="iq-card-coach" class="interview-section-card">
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <div class="interview-panel">
-                <h4>AI Coach controls</h4>
-                <div class="coach-pill-wrap mb-2">
-                  <button class="coach-pill iq-coach-action" data-action="followup">Ask me a challenging follow-up</button>
-                  <button class="coach-pill iq-coach-action" data-action="score">Score my free-form response</button>
-                  <button class="coach-pill iq-coach-action" data-action="improve">Improve my response clarity</button>
-                </div>
-                <label class="form-label" for="iq-active-question">Active question</label>
-                <textarea id="iq-active-question" class="form-control mb-3" rows="3" placeholder="Choose a question from the library or write one."></textarea>
-                <label class="form-label" for="iq-answer-input">Your draft answer (optional)</label>
-                <textarea id="iq-answer-input" class="form-control" rows="5" placeholder="Type your answer to get scoring, rewrite support or coaching."></textarea>
-                <button id="iq-generate-answer" class="btn btn-cta mt-3">Generate Custom AI Response</button>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="interview-panel">
-                <h4>AI response</h4>
-                <div id="iq-ai-response" class="ai-response">Your generated response and coaching feedback will appear here.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -823,10 +633,10 @@
           <div class="cert-category">AI & Analytics</div>
           <ul class="cert-list">
             <li><a href="assets/img/portfolio/certifications/applied-ai-for-human-resources.pdf" target="_blank">Applied AI for Human Resources (LinkedIn Learning, 2025)</a></li>
-            <li><a href="assets/img/portfolio/certifications/creating-interactive-tableau-dashbaords.pdf" target="_blank">Creating Interactive Tableau Dashboards (LinkedIn Learning, 2025)</a></li>
+            <li><a href="assets/img/portfolio/certifications/creating-interactive-tableau-dashboards.pdf" target="_blank">Creating Interactive Tableau Dashboards (LinkedIn Learning, 2025)</a></li>
             <li><a href="assets/img/portfolio/certifications/using-generative-ai-ethically-at-work.pdf" target="_blank">Using Generative AI Ethically at Work (LinkedIn Learning, 2025)</a></li>
             <li><a href="assets/img/portfolio/certifications/generative-ai-in-hr.pdf" target="_blank">Generative AI in HR (LinkedIn Learning, 2025)</a></li>
-            <li><a href="assets/img/portfolio/certifications/actionable-insights-and-business-data-in-practice.pdf" target="_blank">Actionable Insights and Business Data in Practice (LinkedIn Learning, 2025)</a></li>
+            <li><a href="assets/img/portfolio/certifications/actionable-insights-business-data-in-practice.pdf" target="_blank">Actionable Insights and Business Data in Practice (LinkedIn Learning, 2025)</a></li>
             <li><a href="assets/img/portfolio/RAG Certification.pdf" target="_blank">RAG Course for Beginners (Simplilearn SkillUp, 2025)</a></li>
             <li><span>AI for HR: Workforce Planning & Talent Optimization (In Progress)</span></li>
           </ul>
@@ -915,155 +725,6 @@
       setupCarousel('projects-track', 'projects-prev', 'projects-next');
       setupCarousel('ai-track', 'ai-prev', 'ai-next');
       setupCarousel('insights-track', 'insights-prev', 'insights-next');
-
-      const sectionSelect = document.getElementById('iq-section-select');
-      const sectionCards = {
-        setup: document.getElementById('iq-card-setup'),
-        library: document.getElementById('iq-card-library'),
-        coach: document.getElementById('iq-card-coach')
-      };
-      const questionPills = document.getElementById('iq-question-pills');
-      const activeQuestionEl = document.getElementById('iq-active-question');
-      const responseBox = document.getElementById('iq-ai-response');
-      const uploadStatus = document.getElementById('iq-upload-status');
-      const resumeFileInput = document.getElementById('iq-resume');
-      const roleInput = document.getElementById('iq-role');
-      const formatSelect = document.getElementById('iq-format');
-      const jdInput = document.getElementById('iq-jd');
-      const customQuestionInput = document.getElementById('iq-custom-question');
-      const answerInput = document.getElementById('iq-answer-input');
-
-      const defaultQuestions = [
-        'Tell me about yourself and why this role is the right next step.',
-        'Describe a time you used data to influence a business decision.',
-        'Walk me through a challenging stakeholder conversation and the outcome.',
-        'How do you prioritize competing priorities across teams?',
-        'Tell me about a process you improved and the measurable impact.',
-        'Describe a failure and what you changed afterward.',
-        'How would your past experience help in this role within 90 days?'
-      ];
-      let currentQuestions = [...defaultQuestions];
-      let resumeText = '';
-      let coachAction = '';
-      let interviewWorkerUrl = '/chat';
-
-      function renderPills(list) {
-        if (!questionPills) return;
-        questionPills.innerHTML = '';
-        list.forEach((q) => {
-          const btn = document.createElement('button');
-          btn.className = 'coach-pill';
-          btn.type = 'button';
-          btn.textContent = q;
-          btn.addEventListener('click', () => {
-            activeQuestionEl.value = q;
-            document.querySelectorAll('#iq-question-pills .coach-pill').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            sectionSelect.value = 'coach';
-            toggleSection('coach');
-          });
-          questionPills.appendChild(btn);
-        });
-      }
-
-      function toggleSection(key) {
-        Object.keys(sectionCards).forEach((cardKey) => {
-          sectionCards[cardKey]?.classList.toggle('active', cardKey === key);
-        });
-      }
-
-      async function callInterviewAI(message) {
-        const resp = await fetch(interviewWorkerUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
-        if (!resp.ok) throw new Error('AI endpoint unavailable');
-        const data = await resp.json();
-        return data.reply || 'No response generated.';
-      }
-
-      sectionSelect?.addEventListener('change', (e) => toggleSection(e.target.value));
-
-      fetch('/chat-widget/assets/chat/config.json', { cache: 'no-store' })
-        .then((res) => res.ok ? res.json() : null)
-        .then((cfg) => {
-          if (cfg?.workerUrl) interviewWorkerUrl = cfg.workerUrl;
-        })
-        .catch(() => {
-          interviewWorkerUrl = '/chat';
-        });
-
-      resumeFileInput?.addEventListener('change', async (e) => {
-        const [file] = e.target.files || [];
-        if (!file) return;
-        const textLike = ['text/plain', 'text/markdown', 'application/json'].includes(file.type) ||
-          /\.(txt|md|json)$/i.test(file.name);
-
-        try {
-          if (!textLike) {
-            resumeText = '';
-            uploadStatus.textContent = `File "${file.name}" attached. Text extraction for this format is limited in-browser, but the role context is saved.`;
-            return;
-          }
-          resumeText = (await file.text()).slice(0, 6000);
-          uploadStatus.textContent = `Resume text loaded: ${file.name}.`;
-        } catch (err) {
-          resumeText = '';
-          uploadStatus.textContent = 'Resume loaded as file metadata only (text extraction unavailable for this format).';
-        }
-      });
-
-      document.getElementById('iq-generate-questions')?.addEventListener('click', async () => {
-        const role = roleInput.value.trim();
-        const jd = jdInput.value.trim();
-        if (!role) {
-          responseBox.textContent = 'Please enter the role you are interviewing for first.';
-          sectionSelect.value = 'coach';
-          toggleSection('coach');
-          return;
-        }
-        const prompt = `Generate 7 interview questions for the role "${role}". Job description: ${jd || 'not provided'}. Resume highlights: ${resumeText.slice(0, 2200) || 'not provided'}. Return each question on a new line and keep them concise.`;
-        try {
-          const reply = await callInterviewAI(prompt);
-          const parsed = reply.split('\n').map(line => line.replace(/^[-•\d.)\s]+/, '').trim()).filter(Boolean).slice(0, 7);
-          currentQuestions = parsed.length ? parsed : [...defaultQuestions];
-        } catch (err) {
-          currentQuestions = [...defaultQuestions];
-          uploadStatus.textContent = 'AI endpoint not reachable. Showing best-practice default question set.';
-        }
-        renderPills(currentQuestions);
-        sectionSelect.value = 'library';
-        toggleSection('library');
-      });
-
-      document.querySelectorAll('.iq-coach-action').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.iq-coach-action').forEach(el => el.classList.remove('active'));
-          btn.classList.add('active');
-          coachAction = btn.dataset.action || '';
-        });
-      });
-
-      document.getElementById('iq-generate-answer')?.addEventListener('click', async () => {
-        const role = roleInput.value.trim();
-        const question = activeQuestionEl.value.trim() || customQuestionInput.value.trim();
-        const userDraft = answerInput.value.trim();
-        if (!question) {
-          responseBox.textContent = 'Choose a question from the question library or add your own custom question.';
-          return;
-        }
-        const prompt = `You are an enterprise interview coach. Role: ${role || 'not specified'}. Format: ${formatSelect.value}. Question: ${question}. Candidate resume excerpt: ${resumeText.slice(0, 2200) || 'not provided'}. Job description excerpt: ${jdInput.value.trim().slice(0, 1800) || 'not provided'}. Candidate draft answer: ${userDraft || 'none provided'}. Coaching mode: ${coachAction || 'standard'}. Return: 1) polished answer 2) strengths 3) improvement points 4) one suggested follow-up question.`;
-        responseBox.textContent = 'Generating response...';
-        try {
-          const reply = await callInterviewAI(prompt);
-          responseBox.textContent = reply;
-        } catch (err) {
-          responseBox.textContent = 'Unable to reach AI service right now. Please verify worker routing for /chat and retry.';
-        }
-      });
-
-      renderPills(currentQuestions);
     });
   </script>
 
