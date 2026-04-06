@@ -453,8 +453,18 @@
               <div class="interview-panel">
                 <h4>Upload context</h4>
                 <label class="form-label" for="iq-resume">Resume (txt, md, pdf, doc/docx)</label>
-                <input id="iq-resume" class="form-control mb-3" type="file" accept=".txt,.md,.pdf,.doc,.docx">
-                <label class="form-label" for="iq-jd">Job description</label>
+                <input
+                  id="iq-resume"
+                  class="form-control mb-3"
+                  type="file"
+                  accept=".txt,.md,.pdf,.doc,.docx,text/plain,text/markdown,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                <label class="form-label" for="iq-jd-upload">Job description upload (txt, md, pdf, doc/docx)</label>
+                <input
+                  id="iq-jd-upload"
+                  class="form-control mb-3"
+                  type="file"
+                  accept=".txt,.md,.pdf,.doc,.docx,text/plain,text/markdown,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                <label class="form-label" for="iq-jd">Job description (paste text or upload above)</label>
                 <textarea id="iq-jd" class="form-control" rows="6" placeholder="Paste the job description or requirements."></textarea>
               </div>
             </div>
@@ -927,6 +937,7 @@
       const responseBox = document.getElementById('iq-ai-response');
       const uploadStatus = document.getElementById('iq-upload-status');
       const resumeFileInput = document.getElementById('iq-resume');
+      const jdFileInput = document.getElementById('iq-jd-upload');
       const roleInput = document.getElementById('iq-role');
       const formatSelect = document.getElementById('iq-format');
       const jdInput = document.getElementById('iq-jd');
@@ -944,8 +955,21 @@
       ];
       let currentQuestions = [...defaultQuestions];
       let resumeText = '';
+      let resumeContext = '';
+      let jdFileText = '';
+      let jdFileContext = '';
       let coachAction = '';
       let interviewWorkerUrl = '/chat';
+
+      async function parseUploadedText(file) {
+        const textLike = ['text/plain', 'text/markdown', 'application/json'].includes(file.type) ||
+          /\.(txt|md|json)$/i.test(file.name);
+
+        if (!textLike) {
+          return '';
+        }
+        return (await file.text()).slice(0, 6000);
+      }
 
       function renderPills(list) {
         if (!questionPills) return;
@@ -997,33 +1021,46 @@
       resumeFileInput?.addEventListener('change', async (e) => {
         const [file] = e.target.files || [];
         if (!file) return;
-        const textLike = ['text/plain', 'text/markdown', 'application/json'].includes(file.type) ||
-          /\.(txt|md|json)$/i.test(file.name);
-
         try {
-          if (!textLike) {
-            resumeText = '';
-            uploadStatus.textContent = `File "${file.name}" attached. Text extraction for this format is limited in-browser, but the role context is saved.`;
-            return;
-          }
-          resumeText = (await file.text()).slice(0, 6000);
-          uploadStatus.textContent = `Resume text loaded: ${file.name}.`;
+          resumeText = await parseUploadedText(file);
+          resumeContext = `Resume file uploaded: ${file.name} (${file.type || 'unknown type'}).`;
+          uploadStatus.textContent = resumeText
+            ? `Resume text loaded: ${file.name}.`
+            : `Resume file uploaded: ${file.name}. PDF/Word extraction is limited in-browser, but the upload is accepted and file details will be included for AI context.`;
         } catch (err) {
           resumeText = '';
-          uploadStatus.textContent = 'Resume loaded as file metadata only (text extraction unavailable for this format).';
+          resumeContext = `Resume file uploaded: ${file.name} (metadata only).`;
+          uploadStatus.textContent = 'Resume uploaded as file metadata only (text extraction unavailable for this format).';
+        }
+      });
+
+      jdFileInput?.addEventListener('change', async (e) => {
+        const [file] = e.target.files || [];
+        if (!file) return;
+        try {
+          jdFileText = await parseUploadedText(file);
+          jdFileContext = `Job description file uploaded: ${file.name} (${file.type || 'unknown type'}).`;
+          uploadStatus.textContent = jdFileText
+            ? `Job description text loaded: ${file.name}.`
+            : `Job description file uploaded: ${file.name}. PDF/Word extraction is limited in-browser, but the upload is accepted and file details will be included for AI context.`;
+        } catch (err) {
+          jdFileText = '';
+          jdFileContext = `Job description file uploaded: ${file.name} (metadata only).`;
+          uploadStatus.textContent = 'Job description uploaded as file metadata only (text extraction unavailable for this format).';
         }
       });
 
       document.getElementById('iq-generate-questions')?.addEventListener('click', async () => {
         const role = roleInput.value.trim();
-        const jd = jdInput.value.trim();
+        const jd = (jdInput.value.trim() || jdFileText || jdFileContext || 'not provided');
+        const resumeContextForPrompt = (resumeText || resumeContext || 'not provided');
         if (!role) {
           responseBox.textContent = 'Please enter the role you are interviewing for first.';
           sectionSelect.value = 'coach';
           toggleSection('coach');
           return;
         }
-        const prompt = `Generate 7 interview questions for the role "${role}". Job description: ${jd || 'not provided'}. Resume highlights: ${resumeText.slice(0, 2200) || 'not provided'}. Return each question on a new line and keep them concise.`;
+        const prompt = `Generate 7 interview questions for the role "${role}". Job description: ${jd}. Resume highlights: ${resumeText.slice(0, 2200) || resumeContextForPrompt}. Return each question on a new line and keep them concise.`;
         try {
           const reply = await callInterviewAI(prompt);
           const parsed = reply.split('\n').map(line => line.replace(/^[-•\d.)\s]+/, '').trim()).filter(Boolean).slice(0, 7);
@@ -1053,7 +1090,7 @@
           responseBox.textContent = 'Choose a question from the question library or add your own custom question.';
           return;
         }
-        const prompt = `You are an enterprise interview coach. Role: ${role || 'not specified'}. Format: ${formatSelect.value}. Question: ${question}. Candidate resume excerpt: ${resumeText.slice(0, 2200) || 'not provided'}. Job description excerpt: ${jdInput.value.trim().slice(0, 1800) || 'not provided'}. Candidate draft answer: ${userDraft || 'none provided'}. Coaching mode: ${coachAction || 'standard'}. Return: 1) polished answer 2) strengths 3) improvement points 4) one suggested follow-up question.`;
+        const prompt = `You are an enterprise interview coach. Role: ${role || 'not specified'}. Format: ${formatSelect.value}. Question: ${question}. Candidate resume excerpt: ${resumeText.slice(0, 2200) || resumeContext || 'not provided'}. Job description excerpt: ${jdInput.value.trim().slice(0, 1800) || jdFileText.slice(0, 1800) || jdFileContext || 'not provided'}. Candidate draft answer: ${userDraft || 'none provided'}. Coaching mode: ${coachAction || 'standard'}. Return: 1) polished answer 2) strengths 3) improvement points 4) one suggested follow-up question.`;
         responseBox.textContent = 'Generating response...';
         try {
           const reply = await callInterviewAI(prompt);
