@@ -960,6 +960,97 @@
       let jdFileContext = '';
       let coachAction = '';
       let interviewWorkerUrl = '/chat';
+      let pdfjsLibPromise;
+      let mammothPromise;
+
+      function sanitizeExtractedText(text) {
+        const trimmed = (text || '').trim();
+        if (!trimmed) return '';
+
+        const sample = trimmed.slice(0, 1200);
+        const controlCharMatches = sample.match(/[\u0000-\u0008\u000E-\u001F]/g) || [];
+        const controlRatio = controlCharMatches.length / sample.length;
+        const binaryMarkers = /%PDF-|PK\u0003\u0004|endobj|FlateDecode/i.test(sample);
+
+        if (controlRatio > 0.02 || binaryMarkers) {
+          return '';
+        }
+        return trimmed.slice(0, 6000);
+      }
+
+      async function loadPdfJs() {
+        if (!pdfjsLibPromise) {
+          pdfjsLibPromise = import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.min.mjs');
+        }
+        return pdfjsLibPromise;
+      }
+
+      async function loadMammoth() {
+        if (!mammothPromise) {
+          mammothPromise = new Promise((resolve, reject) => {
+            if (window.mammoth) {
+              resolve(window.mammoth);
+              return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+            script.onload = () => resolve(window.mammoth);
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+        return mammothPromise;
+      }
+
+      async function extractPdfText(file) {
+        const pdfjsLib = await loadPdfJs();
+        if (!pdfjsLib) return '';
+        if (pdfjsLib.GlobalWorkerOptions) {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.4.168/build/pdf.worker.min.mjs';
+        }
+        const buffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+        const maxPages = Math.min(pdf.numPages, 10);
+        const chunks = [];
+        for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const content = await page.getTextContent();
+          const pageText = content.items.map(item => item.str || '').join(' ');
+          chunks.push(pageText);
+          if (chunks.join(' ').length > 7000) break;
+        }
+        return sanitizeExtractedText(chunks.join('\n').slice(0, 7000));
+      }
+
+      async function extractDocxText(file) {
+        const mammoth = await loadMammoth();
+        if (!mammoth?.extractRawText) return '';
+        const buffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer: buffer });
+        return sanitizeExtractedText(result.value || '');
+      }
+
+      async function parseUploadedText(file) {
+        const textLike = ['text/plain', 'text/markdown', 'application/json'].includes(file.type) ||
+          /\.(txt|md|json)$/i.test(file.name);
+        const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+        const isDocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || /\.docx$/i.test(file.name);
+
+        if (isPdf) {
+          return extractPdfText(file);
+        }
+
+        if (isDocx) {
+          return extractDocxText(file);
+        }
+
+        if (textLike) {
+          const text = await file.text();
+          return sanitizeExtractedText(text);
+        }
+
+        return '';
+      }
 
       async function parseUploadedText(file) {
         const textLike = ['text/plain', 'text/markdown', 'application/json'].includes(file.type) ||
